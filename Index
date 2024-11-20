@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Pacientes y Médicos</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h2>Bienvenido a la Gestión de dispositivos</h2>
+  <!-- Formularios y botones de insertar/consultar médicos y pacientes -->
+</body>
+
+
+<body>
+  <!-- Incluir barra de navegación desde navbar.html -->
+  <div id="navbar"></div>
+
+
+  <script>
+      // Insertar el contenido de navbar.html en el elemento con id "navbar"
+      fetch('/navbar.html')
+          .then(response => response.text())
+          .then(data => {
+              document.getElementById('navbar').innerHTML = data;
+          })
+          .catch(error => console.error('Error cargando el navbar:', error));
+  </script>
+  <script>
+    // Solicitar el tipo de usuario y ajustar el menú en función de este
+    fetch('/tipo-usuario')
+        .then(response => response.json())
+        .then(data => {
+            const menu = document.getElementById('menu');
+            const tipoUsuario = data.tipo_usuario;
+
+
+            // Agregar opciones de menú según el tipo de usuario
+            if (tipoUsuario === 'admin') {
+                menu.innerHTML += '<li><a href="/ver-usuarios">Ver usuarios</a></li>';
+                menu.innerHTML += '<li><a href="/gestionar-registros">Gestionar dispositivos</a></li>';
+            } else if (tipoUsuario === 'medico') {
+                menu.innerHTML += '<li><a href="/pacientes">Ver Dispositivos</a></li>';
+                menu.innerHTML += '<li><a href="/editar-Dispositivos">Editar Dispositivos</a></li>';
+            }
+            // Opción de cerrar sesión para todos los tipos de usuario
+            menu.innerHTML += '<li><a href="/logout">Cerrar Sesión</a></li>';
+           
+           
+        })
+        .catch(error => console.error('Error obteniendo el tipo de usuario:', error));
+</script>
+</body>
+
+
+  <p>Esta es una pagina para administrar dispositivos medicos</p>
+  <form action="/submit-data" method="POST">
+
+
+    <label for="name">Nombre del dispositivo:</label>
+    <input type="text" id="name" name="name">
+   
+    <label for="descripcion">Descripcion del dispositivo:</label>
+    <input type="text" id="descripcion" name="descripcion">
+ 
+    <label for="estado">Estado del dispositivo:</label>
+    <input type="text" id="estado" name="estado">
+   
+    <label for="usuario_id">Id del usuario:</label>
+    <input type="text" id="usuario_id" name="usuario_id">
+ 
+    <button type="submit">Guardar</button>
+  </form>
+  <button onclick="window.location.href='/pacientes'">Ver Pacientes Guardados</butt
