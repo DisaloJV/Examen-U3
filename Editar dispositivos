@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Paciente</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <link rel="stylesheet" href="/styles.css">
+
+
+  <h2>Editar Paciente</h2>
+  <form id="buscarPacienteForm">
+    <label for="Dispositivo-id">ID del Dispositivo:</label>
+    <input type="number" id="Dispositivo-id" required>
+    <button type="button" onclick="buscarDispositivo()">Buscar</button>
+  </form>
+ 
+  <form id="editarDispositivoForm" style="display: none;" method="POST" action="/editar-dispositivos">
+    <input type="hidden" id="dispositivos-id-hidden" name="id">
+   
+    <label for="name">Nombre del dispositivo:</label>
+    <input type="text" id="name" name="name">
+   
+    <label for="descripcion">Descripcion del dispositivo:</label>
+    <input type="text" id="descripcion" name="descripcion">
+ 
+    <label for="estado">Estado del dispositivo:</label>
+    <input type="text" id="estado" name="estado">
+   
+    <label for="usuario_id">Id del usuario:</label>
+    <input type="text" id="usuario_id" name="usuario_id">
+
+
+    <button type="submit">Guardar Cambios</button>
+    <button type="button" onclick="eliminarDispositivo()">Eliminar Paciente</button>
+  </form>
+
+
+  <script>
+    function buscarDispositivo() {
+      const pacienteId = document.getElementById('Dispositivo-id').value;
+      fetch(`/obtener-dispositivos/${pacienteId}`)
+        .then(response => {
+          if (!response.ok) throw new Error('Dispositivo no encontrado');
+          return response.json();
+        })
+        .then(data => {
+          document.getElementById('editarDispositivoForm').style.display = 'block';
+          document.getElementById('dispositivos-id-hidden').value = data.id;
+          document.getElementById('name').value = data.name;
+          document.getElementById('descripcion').value = data.descripcion;
+          document.getElementById('estado').value = data.estado;
+          document.getElementById('usuario_id').value = data.usuario_id;
+        })
+        .catch(error => alert(error.message));
+    }
+
+
+    function eliminarDispositivo() {
+      const Dispositivoid = document.getElementById('dispositivo-id-hidden').value;
+      if (confirm('¿Estás seguro de que deseas eliminar este dispositiv?')) {
+        fetch(`/eliminar-paciente/${pacienteId}`, {
+          method: 'DELETE'
+        })
+        .then(response => {
+          if (response.ok) {
+            alert('Dispositivos eliminado correctamente.');
+            window.location.href = '/dispositivos'; // Redirigir a la lista de pacientes
+          } else {
+            alert('Error al eliminar el paciente.');
+          }
+        })
+        .catch(error => console.error('Error al eliminar el dispositivos:', error));
+      }
+    }
+  </script>
+
+
+  <button onclick="window.location.href='/'">Volver</button>
+</body>
+</html>
